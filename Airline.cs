@@ -1,34 +1,61 @@
-﻿using System;
+﻿using PRG2_FinalAssignment;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace PRG2_Assignment
 {
-    abstract class Flight
+    class Airline
     {
-        public string FlightNumber { get; set; }
-        public string Origin { get; set; }
-        public string Destination { get; set; }
-        public DateTime ExpectedTime { get; set; }
-        public string Status { get; set; } = "On Time";
+        public string Name { get; set; }
+        public string Code { get; set; }
 
-        public Flight() { }
+        public Dictionary<string, Flight> Flights = new Dictionary<string, Flight>();
 
-        public Flight(string flightNumber, string origin, string destination, DateTime expectedTime)
+        public Airline() { }
+
+        public Airline(string name, string code)
         {
-            FlightNumber = flightNumber;
-            Origin = origin;
-            Destination = destination;
-            ExpectedTime = expectedTime;
+            Name = name;
+            Code = code;
         }
 
-        public abstract double CalculateFees();
+        public bool AddFlight(Flight flight)
+        {
+            if (Flights.ContainsKey(flight.FlightNumber))
+            {
+                return false;
+            }
+            Flights[flight.FlightNumber] = flight;
+            return true;
+        }
+
+        public double CalculateFees()
+        {
+            double totalFees = 0;
+            foreach (Flight flights in Flights.Values)
+            {
+                totalFees += flights.CalculateFees();
+            }
+            return totalFees;
+        }
+
+        public bool RemoveFlight(Flight flight)
+        {
+            if (Flights.ContainsKey(flight.FlightNumber))
+            {
+                Flights.Remove(flight.FlightNumber);
+                return true;
+            }
+            return false;
+        }
 
         public override string ToString()
         {
-            return $"{FlightNumber} from {Origin} to {Destination} at {ExpectedTime} is {Status}";
+            return $"Airline Name: {Name}\nAirline Code: {Code}";
         }
     }
 }
