@@ -270,4 +270,98 @@ void AssignBoardingGate(Dictionary<string, Flight> flightsDict, Dictionary<strin
 
 AssignBoardingGate(terminal.Flights, terminal.BoardingGates);
 
+void CreateNewFlight(Dictionary<string, Flight> flights) //Task 6
+{
+    while (true)
+    {
+        string flightNumber;
+        string origin;
+        string destination;
+        DateTime expectedTime;
+        Flight newFlight;
+        string specialRequestCode = "None";
 
+        Console.Write("Enter Flight Number: ");
+        flightNumber = Console.ReadLine().Trim();
+        Console.Write("Enter Origin: ");
+        origin = Console.ReadLine().Trim();
+        Console.Write("Enter Destination: ");
+        destination = Console.ReadLine().Trim();
+
+        while (true)
+        {
+            Console.Write("Enter Expected Departure/Arrival Time (dd/mm/yyyy hh:mm): ");
+            string timeInput = Console.ReadLine().Trim();
+            if (DateTime.TryParseExact(timeInput, "dd/MM/yyyy HH:mm", null, System.Globalization.DateTimeStyles.None, out expectedTime))
+            {
+                break;
+            }
+            Console.WriteLine("Invalid date format. Please try again.");
+        }
+
+        Console.Write("Do you have any additional information to add (Y/N): ");
+        string choice = Console.ReadLine().ToUpper().Trim();
+        if (choice == "Y")
+        {
+            Console.Write("Enter the special request code (DDJB/CFFT/LWTT/None): ");
+            specialRequestCode = Console.ReadLine().ToUpper().Trim();
+            if (specialRequestCode == "DDJB")
+            {
+                newFlight = new DDJBFlight(flightNumber, origin, destination, expectedTime, 300);
+            }
+            else if (specialRequestCode == "CFFT")
+            {
+                newFlight = new CFFTFlight(flightNumber, origin, destination, expectedTime, 150);
+            }
+            else if (specialRequestCode == "LWTT")
+            {
+                newFlight = new LWTTFlight(flightNumber, origin, destination, expectedTime, 500);
+            }
+            else if (specialRequestCode == "NONE" || specialRequestCode == "")
+            {
+                newFlight = new NORMFLight(flightNumber, origin, destination, expectedTime);
+            }
+            else
+            {
+                Console.WriteLine("Invalid special request code.. exiting.");
+                return;
+            }
+        }
+        else if (choice == "N")
+        {
+            newFlight = new NORMFLight(flightNumber, origin, destination, expectedTime);
+        }
+        else
+        {
+            Console.WriteLine("Invalid input.. exiting.");
+            return;
+        }
+
+        terminal.Flights[newFlight.FlightNumber] = newFlight;
+
+        Console.WriteLine($"Flight {flightNumber} has been successfully added to the system.");
+
+        string filePath = "flights.csv";
+        try
+        {
+            using (StreamWriter sw = new StreamWriter(filePath, true))
+            {
+                sw.WriteLine($"{flightNumber},{origin},{destination},{expectedTime.ToString("t")},{specialRequestCode.ToUpper()}");
+            }
+            Console.WriteLine("Flight information has been saved to flights.csv.");
+        }
+        catch (IOException ex)
+        {
+            Console.WriteLine($"Error writing to file: {ex.Message}");
+        }
+
+        Console.Write("Would you like to add another flight? (Y/N): ");
+        string anotherFlight = Console.ReadLine().ToUpper();
+        if (anotherFlight != "Y")
+        {
+            break;
+        }
+    }
+}
+
+CreateNewFlight(terminal.Flights);
