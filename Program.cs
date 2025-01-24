@@ -127,3 +127,19 @@ void ListAllFlights(Dictionary<string, Flight> flightDict, Dictionary<string, Ai
 }
 
 ListAllFlights(terminal.Flights, terminal.Airlines);
+
+void listAllBoardingGates() // task 4
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("List of Boarding Gates for Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"{"Gate Name",-10} {"DDJB",-10} {"CFFT",-10} {"LWTT",-10}");
+    string[] boardinggates = File.ReadAllLines("boardinggates.csv");
+    for (int i = 1; i < boardinggates.Length; i++)
+    {
+        string[] boardingdeets = boardinggates[i].Split(",");
+        Console.WriteLine($"{boardingdeets[0],-10} {boardingdeets[1],-10} {boardingdeets[2],-10} {boardingdeets[3],-10}");
+    }
+}
+
+listAllBoardingGates();
