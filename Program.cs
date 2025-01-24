@@ -94,3 +94,36 @@ void LoadFlights(string flightscsv) //Task 2
 }
 
 LoadFlights("flights.csv");
+
+
+void ListAllFlights(Dictionary<string, Flight> flightDict, Dictionary<string, Airline> airlineDict)  //Task 3
+{
+    string airlineName = "";
+    string code = "";
+
+    if (flightDict.Keys.Count == 0)
+    {
+        Console.WriteLine("There are no available flights.");
+    }
+    Console.WriteLine("=============================================\r\nList of Flights for Changi Airport Terminal 5\r\n=============================================\r\n");
+    Console.WriteLine($"{"Flight Number",-18}{"Airline Name",-20}{"Orgin",-25}{"Destination",-25}{"Expected Departure/Arrival Time",-40}");
+
+
+
+
+    foreach (Flight flight in flightDict.Values)
+    {
+        Airline airline = terminal.GetAirlineFromFlight(flight);
+        if (airline != null)
+        {
+            airlineName = airline.Name;
+            Console.WriteLine($"{flight.FlightNumber,-18}{airlineName,-20}{flight.Origin,-25}{flight.Destination,-25}{flight.ExpectedTime,-40}");
+        }
+        else
+        {
+            continue;
+        }
+    }
+}
+
+ListAllFlights(terminal.Flights, terminal.Airlines);
