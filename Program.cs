@@ -93,7 +93,8 @@ void LoadFlights(string flightscsv) //Task 2
                     Airline airline = terminal.Airlines[airlineCode];
                     if (!airline.AddFlight(flight))
                     {
-                        Console.WriteLine($"Flight {flightNumber} already exists for airline {airlineCode}, skipping.");
+                        //Console.WriteLine($"Flight {flightNumber} already exists for airline {airlineCode}, skipping.");
+                        return;
                     }
                 }
                 else
@@ -103,7 +104,7 @@ void LoadFlights(string flightscsv) //Task 2
             }
         }
 
-        Console.WriteLine("Flights loaded successfully!");
+        Console.WriteLine($"{terminal.Flights.Count} Flights loaded successfully!");
     }
     catch (Exception ex)
     {
