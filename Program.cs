@@ -357,6 +357,42 @@ void CreateNewFlight(Dictionary<string, Flight> flights) //Task 6
     }
 }
 
+/////////////////
+///
+void displayFlights() //task 7 
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("List of Airlines for Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"{"Airline Code",-15} {"Airline Name"}");
+    string[] airlines = File.ReadAllLines("airlines.csv");
+    for (int i = 1; i < airlines.Length; i++)
+    {
+        string[] airlinedeets = airlines[i].Split(',');
+        Console.WriteLine($"{airlinedeets[1],-15} {airlinedeets[0]}");
+    }
+    Console.Write("Enter Airline Code: ");
+    string code = Console.ReadLine();
+    if (terminal.Airlines.ContainsKey(code))
+    {
+        Console.WriteLine("=============================================");
+        Console.WriteLine($"{"Flight Number",-15} {"Airline Name",-20} {"Origin",-20} {"Destination",-20} {"Expected",-20}");
+        Airline retrievedAirline = terminal.Airlines[code];
+        //Console.WriteLine($"Number of flights for airline {retrievedAirline.Name}: {retrievedAirline.Flights.Count}"); //check to see if dict is populated  
+        foreach (KeyValuePair<string, Flight> lol in retrievedAirline.Flights)  // the airline dict already has the appropriate flights assigned to it. 
+        {
+            Console.WriteLine($"{lol.Value.FlightNumber,-15} {code,-20} {lol.Value.Origin,-20} {lol.Value.Destination,-20} {lol.Value.ExpectedTime,20}");
+        }
+    }
+    else
+    {
+        Console.WriteLine($"Airline with code '{code}' not found.");
+    }
+}
+
+////////////////
+///
+
 while (true)
 {
     Loadfiles();
@@ -392,7 +428,7 @@ while (true)
         }
         else if (choice == "5")
         {
-
+            displayFlights();
         }
         else if (choice == "6")
         {
