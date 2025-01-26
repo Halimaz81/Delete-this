@@ -1,4 +1,10 @@
-﻿using PRG2_Assignment;
+﻿//==========================================================
+// Student Number : S10267107C
+// Partner Number : Sxxxxxxxxx
+// Student Name : Toh Keng Siong
+// Partner Name : Ryan Tan Zong Hong
+//==========================================================
+using PRG2_Assignment;
 using PRG2_FinalAssignment;
 
 Terminal terminal = new Terminal("Terminal 5");
