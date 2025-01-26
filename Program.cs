@@ -12,7 +12,7 @@ void Loadfiles()// task 1
         Airline airlinex = new Airline(airlinedeets[0], airlinedeets[1]);
         terminal.AddAirline(airlinex);
     }
-    Console.WriteLine($"{airlines.Length} Airlines Loaded! ");
+    Console.WriteLine($"{airlines.Length - 1} Airlines Loaded! "); // -1 to compensate for the header
 
     Console.WriteLine("Loading Boarding Gates...");
     string[] boardinggates = File.ReadAllLines("boardinggates.csv");
@@ -22,7 +22,7 @@ void Loadfiles()// task 1
         BoardingGate boardinggatex = new BoardingGate(boardingdeets[0], Convert.ToBoolean(boardingdeets[2]), Convert.ToBoolean(boardingdeets[1]), Convert.ToBoolean(boardingdeets[3])); //Boarding Gate,DDJB,CFFT,LWTT ,bool _supportscfft, bool _supportsddjb, bool _supportslwtt, Flight _flight)
         terminal.AddBoardingGate(boardinggatex);
     }
-    Console.WriteLine($"{boardinggates.Length} Boarding gates Loaded! ");
+    Console.WriteLine($"{boardinggates.Length - 1} Boarding gates Loaded! ");
 
     Console.WriteLine("Done");
 }
