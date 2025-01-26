@@ -27,10 +27,10 @@ void Loadfiles()// task 1
     Console.WriteLine("Done");
 }
 
-Loadfiles();
 
 void LoadFlights(string flightscsv) //Task 2
 {
+    Console.WriteLine("Loading Flights...");
     if (!File.Exists(flightscsv))
     {
         Console.WriteLine("File does not exists!");
@@ -85,7 +85,7 @@ void LoadFlights(string flightscsv) //Task 2
                 terminal.Flights[flight.FlightNumber] = flight;
             }
         }
-        Console.WriteLine("Flights Loaded successfully!");
+        Console.WriteLine($"{terminal.Flights.Count} Flights Loaded!");
     }
     catch (Exception ex)
     {
@@ -93,7 +93,6 @@ void LoadFlights(string flightscsv) //Task 2
     }
 }
 
-LoadFlights("flights.csv");
 
 
 void ListAllFlights(Dictionary<string, Flight> flightDict, Dictionary<string, Airline> airlineDict)  //Task 3
@@ -126,7 +125,6 @@ void ListAllFlights(Dictionary<string, Flight> flightDict, Dictionary<string, Ai
     }
 }
 
-ListAllFlights(terminal.Flights, terminal.Airlines);
 
 void listAllBoardingGates() // task 4
 {
@@ -141,8 +139,6 @@ void listAllBoardingGates() // task 4
         Console.WriteLine($"{boardingdeets[0],-10} {boardingdeets[1],-10} {boardingdeets[2],-10} {boardingdeets[3],-10}");
     }
 }
-
-listAllBoardingGates();
 
 
 void AssignBoardingGate(Dictionary<string, Flight> flightsDict, Dictionary<string, BoardingGate> boardingGates)  //Task 5
@@ -267,9 +263,6 @@ void AssignBoardingGate(Dictionary<string, Flight> flightsDict, Dictionary<strin
     Console.WriteLine($"Flight {selectedFlight.FlightNumber} has been assigned to Boarding Gate {selectedBoardingGate.GateName}");
     Console.WriteLine($"Status: {selectedFlight.Status}");
 }
-
-AssignBoardingGate(terminal.Flights, terminal.BoardingGates);
-
 void CreateNewFlight(Dictionary<string, Flight> flights) //Task 6
 {
     while (true)
@@ -319,7 +312,7 @@ void CreateNewFlight(Dictionary<string, Flight> flights) //Task 6
             }
             else if (specialRequestCode == "NONE" || specialRequestCode == "")
             {
-                newFlight = new NORMFLight(flightNumber, origin, destination, expectedTime);
+                newFlight = new NORMFlight(flightNumber, origin, destination, expectedTime);
             }
             else
             {
@@ -329,7 +322,7 @@ void CreateNewFlight(Dictionary<string, Flight> flights) //Task 6
         }
         else if (choice == "N")
         {
-            newFlight = new NORMFLight(flightNumber, origin, destination, expectedTime);
+            newFlight = new NORMFlight(flightNumber, origin, destination, expectedTime);
         }
         else
         {
@@ -364,4 +357,61 @@ void CreateNewFlight(Dictionary<string, Flight> flights) //Task 6
     }
 }
 
-CreateNewFlight(terminal.Flights);
+while (true)
+{
+    Loadfiles();
+    LoadFlights("flights.csv");
+    Console.WriteLine("=============================================\r\nWelcome to Changi Airport Terminal 5\r\n=============================================\r\n");
+    Console.WriteLine("1. List All Flights");
+    Console.WriteLine("2. List Boarding Gates");
+    Console.WriteLine("3. Assign a Boarding Gate to a Flight");
+    Console.WriteLine("4. Create Flight");
+    Console.WriteLine("5. Display Airline Flights");
+    Console.WriteLine("6. Modify Flight Details");
+    Console.WriteLine("7. Display Flight Schedule");
+    Console.WriteLine("0. Exit");
+    Console.WriteLine("Please select your option:");
+    string? choice = Console.ReadLine();
+    if (choice != null)
+    {
+        if (choice == "1")
+        {
+            ListAllFlights(terminal.Flights, terminal.Airlines);
+        }
+        else if (choice == "2")
+        {
+            listAllBoardingGates();
+        }
+        else if (choice == "3")
+        {
+            AssignBoardingGate(terminal.Flights, terminal.BoardingGates);
+        }
+        else if (choice == "4")
+        {
+            CreateNewFlight(terminal.Flights);
+        }
+        else if (choice == "5")
+        {
+
+        }
+        else if (choice == "6")
+        {
+
+        }
+        else if (choice == "7")
+        {
+
+        }
+        else if (choice == "0")
+        {
+            Console.WriteLine("Goodbye!");
+            break;
+        }
+    }
+    else
+    {
+        Console.WriteLine("Please enter an option, if not 0 to exit.");
+        continue;
+    }
+
+}
