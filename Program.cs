@@ -30,7 +30,6 @@ void Loadfiles()// task 1
 
 void LoadFlights(string flightscsv) //Task 2
 {
-    Console.WriteLine("Loading Flights...");
     if (!File.Exists(flightscsv))
     {
         Console.WriteLine("File does not exists!");
@@ -40,7 +39,7 @@ void LoadFlights(string flightscsv) //Task 2
     {
         using (StreamReader sr = new StreamReader(flightscsv))
         {
-            sr.ReadLine();
+            sr.ReadLine(); // Skip header
             string? data;
             while ((data = sr.ReadLine()) != null)
             {
@@ -63,8 +62,8 @@ void LoadFlights(string flightscsv) //Task 2
                     specialRequestCode = linedata[4];
                 }
 
+                // Create the flight object
                 Flight flight;
-
                 if (specialRequestCode == "DDJB")
                 {
                     flight = new DDJBFlight(flightNumber, origin, destination, expectedDepartureArrival, 300);
@@ -82,10 +81,29 @@ void LoadFlights(string flightscsv) //Task 2
                     flight = new NORMFlight(flightNumber, origin, destination, expectedDepartureArrival);
                 }
 
+                // Add the flight to the global terminal.Flights dictionary
                 terminal.Flights[flight.FlightNumber] = flight;
+
+                // Extract airline code from flight number
+                string airlineCode = flightNumber.Split(' ')[0];
+
+                // Check if the airline exists in terminal.Airlines
+                if (terminal.Airlines.ContainsKey(airlineCode))
+                {
+                    Airline airline = terminal.Airlines[airlineCode];
+                    if (!airline.AddFlight(flight))
+                    {
+                        Console.WriteLine($"Flight {flightNumber} already exists for airline {airlineCode}, skipping.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Airline with code '{airlineCode}' not found, skipping flight {flightNumber}.");
+                }
             }
         }
-        Console.WriteLine($"{terminal.Flights.Count} Flights Loaded!");
+
+        Console.WriteLine("Flights loaded successfully!");
     }
     catch (Exception ex)
     {
