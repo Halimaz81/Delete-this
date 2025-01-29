@@ -11,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace PRG2_Assignment
 {
-    abstract class Flight
+    abstract class Flight : IComparable<Flight>
     {
         public string FlightNumber { get; set; }
         public string Origin { get; set; }
         public string Destination { get; set; }
         public DateTime ExpectedTime { get; set; }
-        public string Status { get; set; } = "On Time";
+        public string Status { get; set; } = "Scheduled";
 
         public Flight() { }
 
@@ -29,6 +29,10 @@ namespace PRG2_Assignment
             ExpectedTime = expectedTime;
         }
 
+        public int CompareTo(Flight other)
+        {
+            return this.ExpectedTime.CompareTo(other.ExpectedTime);
+        }
         public abstract double CalculateFees();
 
         public override string ToString()

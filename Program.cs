@@ -242,6 +242,7 @@ void AssignBoardingGate(Dictionary<string, Flight> flightsDict, Dictionary<strin
     Console.WriteLine($"Supports DDJB: {selectedBoardingGate.SupportsDDJB}");
     Console.WriteLine($"Supports CFFT: {selectedBoardingGate.SupportsCFFT}");
     Console.WriteLine($"Supports LWTT: {selectedBoardingGate.SupportsLWTT}");
+    selectedBoardingGate.Flight = selectedFlight;
     while (true)
     {
         Console.WriteLine("Would you like to update the status of the flight? (Y/N): ");
@@ -275,7 +276,7 @@ void AssignBoardingGate(Dictionary<string, Flight> flightsDict, Dictionary<strin
         }
         else if (updateStatusChoice == "N")
         {
-            selectedFlight.Status = "On Time";
+            selectedFlight.Status = "Scheduled";
             break;
         }
         else
@@ -716,6 +717,52 @@ void modifyFlights() //task 8
 
     }
 }
+void DisplayFlightSchedule(Dictionary<string, Flight> flightDict, Dictionary<string, BoardingGate> boardingGates) //task 9
+{
+    // Check if there are any flights
+    if (flightDict.Count == 0)
+    {
+        Console.WriteLine("There are no available flights.");
+        return;
+    }
+
+    // Sort flights by ExpectedTime
+    List<Flight> sortedFlights = new List<Flight>(flightDict.Values);
+    sortedFlights.Sort();
+    string airlineName = "";
+
+    // Display header
+    Console.WriteLine("=============================================");
+    Console.WriteLine("Flight Schedule for Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"{"Flight Number",-18}{"Airline Name",-20}{"Origin",-25}{"Destination",-25}{"Expected Departure/Arrival Time",-40}{"Status",-20}{"Boarding Gate",-20}");
+    Console.WriteLine(new string('-', 100));
+
+    // Display each flight in sorted order
+    foreach (Flight flight in sortedFlights)
+    {
+        Airline airline = terminal.GetAirlineFromFlight(flight);
+        if (airline != null)
+        {
+            airlineName = airline.Name;
+        }
+        else
+        {
+            airlineName = "unavailable";
+        }
+        string gateName = "Unassigned";
+        foreach (BoardingGate gate in boardingGates.Values)
+        {
+            if (gate.Flight == flight)
+            {
+                gateName = gate.GateName;
+                break;
+            }
+        }
+
+        Console.WriteLine($"{flight.FlightNumber,-18}{airlineName,-20}{flight.Origin,-25}{flight.Destination,-25}{flight.ExpectedTime,-40}{flight.Status,-20}{gateName,-10}");
+    }
+}
 
 while (true)
 {
@@ -760,7 +807,7 @@ while (true)
         }
         else if (choice == "7")
         {
-
+            DisplayFlightSchedule(terminal.Flights, terminal.BoardingGates);
         }
         else if (choice == "0")
         {
