@@ -21,6 +21,11 @@ namespace PRG2_Assignment
         public Dictionary<string, BoardingGate> BoardingGates = new Dictionary<string, BoardingGate>();
 
         public Dictionary<string, double> GateFees = new Dictionary<string, double>();
+        public Queue<Flight> UnassignedFlights { get; private set; } = new Queue<Flight>();
+
+        public List<BoardingGate> UnassignedGates { get; private set; } = new List<BoardingGate> { };
+
+
 
         public Terminal() { }
 
@@ -28,6 +33,20 @@ namespace PRG2_Assignment
         {
             TerminalName = terminalName;
         }
+
+
+        public BoardingGate GetAssignedGate(Flight flight) // extra method assigned only for the advanced feature.
+        {
+            foreach (BoardingGate gate in BoardingGates.Values)
+            {
+                if (gate.Flight == flight)
+                {
+                    return gate;
+                }
+            }
+            return null; //returns null if theres no gate found for the flight. 
+        }
+
 
         public bool AddAirline(Airline airline)
         {
@@ -51,14 +70,12 @@ namespace PRG2_Assignment
 
         public Airline GetAirlineFromFlight(Flight flight)
         {
-            string code = "";
-            for (int i = 0; i < 2; i++)
+            foreach (Airline airline in Airlines.Values)
             {
-                code += flight.FlightNumber[i];
-            }
-            if (Airlines.ContainsKey(code))
-            {
-                return Airlines[code];
+                if (airline.Flights.ContainsKey(flight.FlightNumber))
+                {
+                    return airline;
+                }
             }
             return null;
         }
