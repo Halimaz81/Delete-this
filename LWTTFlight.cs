@@ -5,6 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//==========================================================
+// Student Number : S10268158
+// Student Name : Ryan Tan Zong Hong
+// Partner Name : Toh Keng Siong
+//==========================================================
+
 namespace PRG2_FinalAssignment
 {
     class LWTTFlight : Flight
