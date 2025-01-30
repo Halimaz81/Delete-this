@@ -764,6 +764,133 @@ void DisplayFlightSchedule(Dictionary<string, Flight> flightDict, Dictionary<str
     }
 }
 
+
+void processUnassignedFlights() // advanced feature A 
+{
+    int initialAssignedFlights = 0;
+    int initialUnassignedFlights = 0;
+    int totalFlights = terminal.Flights.Count;
+
+    foreach (Airline airline in terminal.Airlines.Values)
+    {
+        foreach (Flight flight in airline.Flights.Values)
+        {
+            BoardingGate assignedGate = terminal.GetAssignedGate(flight);
+            if (assignedGate != null)
+            {
+                initialAssignedFlights += 1;
+            }
+            else
+            {
+                initialUnassignedFlights += 1;
+                terminal.UnassignedFlights.Enqueue(flight);
+            }
+        }//ending flight loop brack
+    }// ending airline loop brack 
+
+    int unassignedGates = 0;
+    int totalGates = terminal.BoardingGates.Count;
+    int assignedGates = 0;
+
+    foreach (BoardingGate gate in terminal.BoardingGates.Values)
+    {
+        if (gate.Flight == null) // Gate has no flight assigned
+        {
+            unassignedGates += 1;
+            terminal.UnassignedGates.Add(gate);
+        }
+        else
+        {
+            assignedGates += 1;
+        }
+    }//ending gate loop brack 
+
+
+
+    Console.WriteLine("Unassigned: " + initialUnassignedFlights); // initally, total unassigned flights = 30, which should be the case. 
+    Console.WriteLine("Assigned: " + initialAssignedFlights);
+    Console.WriteLine("Total flights: " + totalFlights);
+    //Console.WriteLine(terminal.UnassignedFlights.Count);
+    Console.WriteLine($"Unassigned Gates: {unassignedGates}");
+    Console.WriteLine($"Total Gates: {totalGates}");
+    //foreach (Flight f in terminal.UnassignedFlights) //delete this ltr
+    //{
+    //    Console.WriteLine(f);
+    //}
+
+    //Console.WriteLine("");
+    //Console.WriteLine("GATE ASSIGNMENT START");
+    //Console.WriteLine("");
+
+    int flightsAndGatesAssigned = 0;
+    while (terminal.UnassignedFlights.Count != 0)
+    {
+        Flight flightx = terminal.UnassignedFlights.Dequeue(); //stores the first flight in the queue as flightx
+        string flightType = "";
+        if (flightx is LWTTFlight)// assigns the flight type 
+        {
+            flightType = "LWTT";
+        }
+        else if (flightx is CFFTFlight)
+        {
+            flightType = "CFFT";
+        }
+        else if (flightx is DDJBFlight)
+        {
+            flightType = "DDJB";
+        }
+        else if (flightx is NORMFlight)
+        {
+            flightType = "Norm";
+        }
+
+        foreach (BoardingGate gate in new List<BoardingGate>(terminal.UnassignedGates)) //creates a copy of the terminal.unassignedgates to prevent index shifting
+        {
+            if (gate.SupportsDDJB && flightType == "DDJB" ||
+                gate.SupportsLWTT && flightType == "LWTT" ||
+                gate.SupportsCFFT && flightType == "CFFT" ||
+                flightType == "Norm")
+            {
+                //Console.WriteLine($"Assigned flight {flightx.FlightNumber} to gate {gate.GateName}");
+                flightsAndGatesAssigned += 1;
+                gate.Flight = flightx; // Assign the flight to the gate
+                terminal.UnassignedGates.Remove(gate); // Remove the gate from unassigned gates
+                //Console.WriteLine($"Gate {gate.GateName} removed from unassigned gates. Remaining gates: {terminal.UnassignedGates.Count}");
+                //if (terminal.UnassignedGates.Contains(gate))
+                //{
+                //    //Console.WriteLine($"Error: Gate {gate.GateName} not in unassigned gates but removed.");
+                //} // debug if statement check 
+                break; // Exit the loop after assigning the flight
+
+            }
+        }
+
+
+    }// ending while brack 
+
+    Console.WriteLine("Total assigned flights and gates:" + flightsAndGatesAssigned);
+    Console.WriteLine($"Final count of unassigned gates: {terminal.UnassignedGates.Count}");
+    Console.WriteLine($"Final count of unassigned flights: {terminal.UnassignedFlights.Count}");
+    // Calculate percentages
+    int automaticallyProcessedFlights = flightsAndGatesAssigned; // Automatically assigned flights
+    int alreadyAssignedFlights = initialAssignedFlights; // Initially assigned flights
+
+    int automaticallyProcessedGates = flightsAndGatesAssigned; // Automatically assigned gates
+    int alreadyAssignedGates = totalGates - unassignedGates; // Initially assigned gates
+
+    double percentageFlightsAutomaticallyProcessed = ((double)automaticallyProcessedFlights / totalFlights) * 100;
+    double percentageGatesAutomaticallyProcessed = ((double)automaticallyProcessedGates / totalGates) * 100;
+
+    // Display results
+    Console.WriteLine($"Percentage of flights processed automatically: {percentageFlightsAutomaticallyProcessed:F2}%");
+    Console.WriteLine($"Percentage of gates processed automatically: {percentageGatesAutomaticallyProcessed:F2}%");
+
+    //	display the total number of Flights and Boarding Gates that were processed automatically over those that were already assigned as a percentage
+    //total gates - unassigned gates will give u assigned gates. 
+
+
+}// ending method brack 
+
 while (true)
 {
     Loadfiles();
