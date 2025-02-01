@@ -772,17 +772,18 @@ void processUnassignedFlights() // advanced feature A Ryan Tan
     int initialAssignedFlights = 0;
     int initialUnassignedFlights = 0;
     int totalFlights = terminal.Flights.Count;
+    terminal.UnassignedGates.Clear(); // Reset the list before processing flights again, to avoid multiple calls. 
 
     foreach (Airline airline in terminal.Airlines.Values)
     {
         foreach (Flight flight in airline.Flights.Values)
         {
             BoardingGate assignedGate = terminal.GetAssignedGate(flight);
-            if (assignedGate != null)
+            if (assignedGate != null) //if a gate is found, count it as an assigned flight.
             {
                 initialAssignedFlights += 1;
             }
-            else
+            else //else,count it as unassigned and add it to the terminal queue. 
             {
                 initialUnassignedFlights += 1;
                 terminal.UnassignedFlights.Enqueue(flight);
@@ -796,12 +797,12 @@ void processUnassignedFlights() // advanced feature A Ryan Tan
 
     foreach (BoardingGate gate in terminal.BoardingGates.Values)
     {
-        if (gate.Flight == null) // Gate has no flight assigned
+        if (gate.Flight == null) // if gate has no flight assigned, count it as unassigned, assign it to the terminal list. 
         {
             unassignedGates += 1;
             terminal.UnassignedGates.Add(gate);
         }
-        else
+        else // if gate has a flight assigned
         {
             assignedGates += 1;
         }
@@ -889,7 +890,10 @@ void processUnassignedFlights() // advanced feature A Ryan Tan
 
     //	display the total number of Flights and Boarding Gates that were processed automatically over those that were already assigned as a percentage
     //total gates - unassigned gates will give u assigned gates. 
-
+    Console.WriteLine();
+    Console.WriteLine();
+    Console.WriteLine("Flight details:");
+    terminal.DisplayFlights();
 
 }// ending method brack 
 
@@ -925,7 +929,6 @@ Loadfiles();
 LoadFlights("flights.csv");
 while (true)
 {
-    processUnassignedFlights();
     Console.WriteLine("=============================================\r\nWelcome to Changi Airport Terminal 5\r\n=============================================\r\n");
     Console.WriteLine("1. List All Flights");
     Console.WriteLine("2. List Boarding Gates");
@@ -935,6 +938,7 @@ while (true)
     Console.WriteLine("6. Modify Flight Details");
     Console.WriteLine("7. Display Flight Schedule");
     Console.WriteLine("8. Display Calculated fees");
+    Console.WriteLine("9: Assign boarding gates in bulk");
     Console.WriteLine("0. Exit");
     Console.WriteLine("Please select your option:");
     string? choice = Console.ReadLine();
@@ -971,6 +975,10 @@ while (true)
         else if (choice == "8")
         {
             CalculateTotalFees(terminal.Flights);
+        }
+        else if (choice == "9")
+        {
+            processUnassignedFlights();
         }
         else if (choice == "0")
         {
