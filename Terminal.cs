@@ -131,6 +131,32 @@ namespace PRG2_Assignment
 
         }
 
+
+        public void DisplayFlights() //method to display flights, only used in advanced feature A
+        {
+            Console.WriteLine($"{"Flight Number",-15} {"Airline Name",-20} {"Origin",-20} {"Destination",-20} {"Expected",-20} {"Special Request Code",-20} {"Boarding Gate",-20}");
+
+            foreach (var flight in Flights.Values)
+            {
+                string airlineName = GetAirlineFromFlight(flight)?.Name ?? "Unknown Airline";
+                string specialRequestCode = GetSpecialRequestCode(flight);
+                string boardingGate = GetAssignedGate(flight)?.GateName ?? "Unassigned";
+
+                Console.WriteLine($"{flight.FlightNumber,-15} {airlineName,-20} {flight.Origin,-20} {flight.Destination,-20} {flight.ExpectedTime,-20} {specialRequestCode,-20} {boardingGate,-20}");
+            }
+        }
+
+        //method to get special request code, only used in advanced feature A
+        private string GetSpecialRequestCode(Flight flight)
+        {
+            if (flight is CFFTFlight) return "CFFT";
+            if (flight is DDJBFlight) return "DDJB";
+            if (flight is LWTTFlight) return "LWTT";
+            return "None"; // NORMFlight has no special request
+        }
+
+
+
         public override string ToString()
         {
             return $"Terminal name: {TerminalName}";
