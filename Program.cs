@@ -356,7 +356,8 @@ void CreateNewFlight(Dictionary<string, Flight> flights) //Task 6
             return;
         }
 
-        terminal.Flights[newFlight.FlightNumber] = newFlight;
+        terminal.Flights[newFlight.FlightNumber] = newFlight; // add newly created flight into the terminal flight class
+        terminal.GetAirlineFromFlight(newFlight).AddFlight(newFlight); // add newly created flight into the airline flight class
 
         Console.WriteLine($"Flight {flightNumber} has been successfully added to the system.");
 
@@ -706,8 +707,9 @@ void modifyFlights() //task 8
                 Console.WriteLine($"Flight {flightchosen} unassigned from boarding gate {gateToRemove.GateName}.");
             }
 
-            // 3. remove the flight from the airlines flight dict. 
+            // 3. remove the flight from the airlines flight dict and terminal flight dict
             retrievedAirline2.Flights.Remove(flightchosen);
+            terminal.Flights.Remove(flightchosen);
             Console.WriteLine($"Flight {flightchosen} has been successfully deleted.");
         }
         else
@@ -765,7 +767,7 @@ void DisplayFlightSchedule(Dictionary<string, Flight> flightDict, Dictionary<str
 }
 
 
-void processUnassignedFlights() // advanced feature A 
+void processUnassignedFlights() // advanced feature A Ryan Tan 
 {
     int initialAssignedFlights = 0;
     int initialUnassignedFlights = 0;
@@ -891,10 +893,39 @@ void processUnassignedFlights() // advanced feature A
 
 }// ending method brack 
 
+void CalculateTotalFees(Dictionary<string, Flight> flights) // Advanced feature B Toh Keng Siong
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("Total Fees Per Airline for Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+    Dictionary<string, double> airlineFees = new Dictionary<string, double>();
+    Dictionary<string, int> airlineFlightCount = new Dictionary<string, int>();
+    double totalDiscount = 0;
+
+    foreach (Flight flight in flights.Values)
+    {
+        BoardingGate assignedGate = terminal.GetAssignedGate(flight); //checking if all flights has been assigned a boardingGates
+        if (assignedGate == null)
+        {
+            Console.WriteLine($"Flight {flight.FlightNumber} has no assigned boarding gate. Assign all gates before calculating fees.");
+            return;
+        }
+
+        Airline airlineObj = terminal.GetAirlineFromFlight(flight);
+        if (airlineObj == null)
+        {
+            Console.WriteLine($"Error: Unable to find airline for flight {flight.FlightNumber}.");
+            continue;
+        }
+    }
+    terminal.PrintAirlineFees();
+}
+
+Loadfiles();
+LoadFlights("flights.csv");
 while (true)
 {
-    Loadfiles();
-    LoadFlights("flights.csv");
+    processUnassignedFlights();
     Console.WriteLine("=============================================\r\nWelcome to Changi Airport Terminal 5\r\n=============================================\r\n");
     Console.WriteLine("1. List All Flights");
     Console.WriteLine("2. List Boarding Gates");
@@ -903,6 +934,7 @@ while (true)
     Console.WriteLine("5. Display Airline Flights");
     Console.WriteLine("6. Modify Flight Details");
     Console.WriteLine("7. Display Flight Schedule");
+    Console.WriteLine("8. Display Calculated fees");
     Console.WriteLine("0. Exit");
     Console.WriteLine("Please select your option:");
     string? choice = Console.ReadLine();
@@ -935,6 +967,10 @@ while (true)
         else if (choice == "7")
         {
             DisplayFlightSchedule(terminal.Flights, terminal.BoardingGates);
+        }
+        else if (choice == "8")
+        {
+            CalculateTotalFees(terminal.Flights);
         }
         else if (choice == "0")
         {
