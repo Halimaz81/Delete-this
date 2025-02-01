@@ -94,17 +94,23 @@ namespace PRG2_Assignment
                 int flightCount = 0;
                 airlineFee = airlines.CalculateFees();
                 flightCount = 0; //re-initialize flightcount to 0 for each airline.
-                foreach(Flight flight in airlines.Flights.Values)
+
+                foreach (Flight flight in airlines.Flights.Values)
                 {
                     flightCount++; //counts the number of flight from the airline
 
-                    discount += (flightCount / 3) * 350; // Discount for every 3 flights
+                    airlineFee += GateFees[GetAssignedGate(flight).GateName];
+
+                    if (flightCount % 3 == 0 && flightCount > 0) // Discount for every 3 flights
+                    {
+                        discount += 350;
+                    }
 
                     if (flight.ExpectedTime.Hour < 11 || flight.ExpectedTime.Hour > 21) //Discount for flights before 11am and after 9pm
                     {
                         discount += 110;
                     }
-                    if (flight.Origin.ToUpper() == "Dubai (DXB)" || flight.Origin.ToUpper() == "Bangkok (BKK)" || flight.Origin.ToUpper() == "Tokyo (NRT)") // Discount for flights from Dubai Bangkok ir Tokyo
+                    if (flight.Origin.ToUpper() == "DUBAI (DXB)" || flight.Origin.ToUpper() == "BANGKOK (BKK)" || flight.Origin.ToUpper() == "TOKYO (NRT)") // Discount for flights from Dubai Bangkok ir Tokyo
                     {
                         discount += 25;
                     }
@@ -112,14 +118,15 @@ namespace PRG2_Assignment
                     {
                         discount += 50;
                     }
+
                 }
                 if (flightCount > 5)
                 {
-                    airlineFee *= 0.97; //apply 3 percent off to the airline fees before any discount
+                    discount += (airlineFee * 0.03); //apply 3 percent off to the airline fees before any discount
                 }
                 totalFees += airlineFee;
                 totalDiscount += discount;
-                Console.WriteLine($"Airline: {airlines.Code}, Total Fee: ${airlineFee:F2}, Discount Applied: ${discount:F2}"); 
+                Console.WriteLine($"Airline: {airlines.Code}, Total Fee: ${airlineFee:F2}, Discount Applied: ${discount:F2}");
             }
             double discountedTotalFees = totalFees - totalDiscount;
             double discountPercentage = (totalDiscount / discountedTotalFees) * 100;

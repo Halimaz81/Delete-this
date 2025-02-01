@@ -27,6 +27,7 @@ void Loadfiles()// task 1
         string[] boardingdeets = boardinggates[i].Split(",");
         BoardingGate boardinggatex = new BoardingGate(boardingdeets[0], Convert.ToBoolean(boardingdeets[2]), Convert.ToBoolean(boardingdeets[1]), Convert.ToBoolean(boardingdeets[3])); //Boarding Gate,DDJB,CFFT,LWTT ,bool _supportscfft, bool _supportsddjb, bool _supportslwtt, Flight _flight)
         terminal.AddBoardingGate(boardinggatex);
+        terminal.GateFees[boardinggatex.GateName] = boardinggatex.CalculateFees(); //add base fee 300$ to the GateFees Dictionary in terminal.cs
     }
     Console.WriteLine($"{boardinggates.Length - 1} Boarding gates Loaded! ");
 

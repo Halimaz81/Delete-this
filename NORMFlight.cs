@@ -15,29 +15,16 @@ namespace PRG2_FinalAssignment
 {
     class NORMFlight : Flight
     {
-        public override double CalculateFees()
-        {
-            double extrafees = 0;
-            if (Origin == "Singapore (SIN)")//departing flights
-            {
-                extrafees += 800;
-            }
-            else if (Destination == "Singapore (SIN)") //arriving flights
-            {
-                extrafees += 500;
-            }
-
-            double totalfees = 300 + extrafees; //300 is the Boarding gate base fee
-            return totalfees;
-
-        }
-
         public NORMFlight(string flightNumber, string origin, string destination, DateTime expectedTime) : base(flightNumber, origin, destination, expectedTime)
         {
 
         }
         public NORMFlight() : base() { }
 
+        public override double CalculateFees()
+        {
+            return base.CalculateFees();
+        }
         public override string ToString()
         {
             return base.ToString();

@@ -31,13 +31,6 @@ namespace PRG2_Assignment
         public double CalculateFees()
         {
             double baseFee = 300;
-            if (SupportsCFFT == true)
-                baseFee += 150;
-            if (SupportsDDJB == true)
-                baseFee += 300;
-            if (SupportsLWTT == true)
-                baseFee += 500;
-
             return baseFee;
         }
 

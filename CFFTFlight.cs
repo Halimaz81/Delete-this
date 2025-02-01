@@ -16,30 +16,15 @@ namespace PRG2_FinalAssignment
     class CFFTFlight : Flight
     {
         public double RequestFee { get; set; }
-        public override double CalculateFees()
-        {
-            double extrafees = 0;
-            if (Origin == "Singapore (SIN)")//departing flights
-            {
-                extrafees += 800;
-            }
-            else if (Destination == "Singapore (SIN)") //arriving flights
-            {
-                extrafees += 500;
-            }
-
-            double totalfees = 300 + RequestFee + extrafees; //300 is the Boarding gate base fee
-            return totalfees;
-        }
-
         public CFFTFlight(string flightNumber, string origin, string destination, DateTime expectedTime, double requestfee) : base(flightNumber, origin, destination, expectedTime)
         {
             RequestFee = requestfee;
         }
 
-
-        public string Status = "On time";
-
+        public override double CalculateFees()
+        {
+            return RequestFee + base.CalculateFees(); 
+        }
         public CFFTFlight() { }
         public override string ToString()
         {

@@ -33,7 +33,21 @@ namespace PRG2_Assignment
         {
             return this.ExpectedTime.CompareTo(other.ExpectedTime);
         }
-        public abstract double CalculateFees();
+        public virtual double CalculateFees()
+        {
+            double totalFee = 0;
+
+            if (Origin == "Singapore (SIN)")
+            {
+                totalFee = 800;
+            }
+            else if (Destination == "Singapore (SIN)")
+            {
+                totalFee = 500;
+            }
+
+            return totalFee;
+        }
 
         public override string ToString()
         {
