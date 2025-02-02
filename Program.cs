@@ -635,7 +635,7 @@ void displayFlights() //task 7
         Console.WriteLine($"{airlinedeets[1],-15} {airlinedeets[0]}");
     }
     Console.Write("Enter Airline Code: ");
-    string code = Console.ReadLine();
+    string code = Console.ReadLine().ToUpper();
     if (terminal.Airlines.ContainsKey(code))
     {
         Console.WriteLine("=============================================");
@@ -668,7 +668,7 @@ void modifyFlights() //task 8
         Console.WriteLine($"{airlinedeets[1],-15} {airlinedeets[0]}");
     }
     Console.Write("Enter Airline Code: ");
-    string code = Console.ReadLine();
+    string code = Console.ReadLine().ToUpper();
     if (terminal.Airlines.ContainsKey(code))
     {
         Console.WriteLine("=============================================");
