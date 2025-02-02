@@ -135,7 +135,6 @@ namespace PRG2_Assignment
             Console.WriteLine($"Total Discounts: ${totalDiscount:F2}");
             Console.WriteLine($"Final Total Fees Collected: ${discountedTotalFees:F2}");
             Console.WriteLine($"Discount Percentage: {discountPercentage:F2}%");
-
         }
 
 
