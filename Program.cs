@@ -205,7 +205,7 @@ void AssignBoardingGate(Dictionary<string, Flight> flightsDict, Dictionary<strin
 
             //get flight from user
             Console.WriteLine("Enter the Flight Number: ");
-            string flightNumber = Console.ReadLine().Trim();
+            string flightNumber = Console.ReadLine().ToUpper().Trim();
             string[] inputFlight = flightNumber.Split(' ');
 
             // Validate Flight Number input
@@ -268,10 +268,10 @@ void AssignBoardingGate(Dictionary<string, Flight> flightsDict, Dictionary<strin
             }
 
             bool assignable =
-                (flightNumber is LWTTFlight && selectedBoardingGate.SupportsLWTT) ||
-                (flightNumber is CFFTFlight && selectedBoardingGate.SupportsDDJB) ||
-                (flightNumber is DDJBFlight && selectedBoardingGate.SupportsCFFT) ||
-                (flightNumber is NORMFlight);
+                (selectedFlight is LWTTFlight && selectedBoardingGate.SupportsLWTT) ||
+                (selectedFlight is CFFTFlight && selectedBoardingGate.SupportsCFFT) ||
+                (selectedFlight is DDJBFlight && selectedBoardingGate.SupportsDDJB) ||
+                (selectedFlight is NORMFlight);
 
             if (!assignable)
             {
