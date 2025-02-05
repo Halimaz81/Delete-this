@@ -6,6 +6,7 @@
 //==========================================================
 using PRG2_Assignment;
 using PRG2_FinalAssignment;
+using System.Globalization;
 using System.Net.Security;
 
 Terminal terminal = new Terminal("Terminal 5");
@@ -418,7 +419,7 @@ void CreateNewFlight(Dictionary<string, Flight> flights) //Task 6
                 while (true)
                 {
                     Console.Write("Enter Flight Number: ");
-                    flightNumber = Console.ReadLine().Trim();
+                    flightNumber = Console.ReadLine().ToUpper().Trim();
                     string[] inputFlight = flightNumber.Split(' ');
 
                     if (string.IsNullOrEmpty(flightNumber)) //validating that user did not enter an empty field
@@ -551,7 +552,7 @@ void CreateNewFlight(Dictionary<string, Flight> flights) //Task 6
             {
                 Console.Write("Enter Expected Departure/Arrival Time (dd/mm/yyyy hh:mm): ");
                 string timeInput = Console.ReadLine().Trim();
-                if (DateTime.TryParseExact(timeInput, "dd/MM/yyyy HH:mm", null, System.Globalization.DateTimeStyles.None, out expectedTime))
+                if (DateTime.TryParseExact(timeInput, "dd/MM/yyyy HH:mm", null, DateTimeStyles.None, out expectedTime))
                 {
                     break;
                 }
@@ -1233,6 +1234,10 @@ while (true)
         {
             Console.WriteLine("Goodbye!");
             break;
+        }
+        else
+        {
+            Console.WriteLine("Please enter a valid option.");
         }
     }
     else
