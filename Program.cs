@@ -6,6 +6,7 @@
 //==========================================================
 using PRG2_Assignment;
 using PRG2_FinalAssignment;
+using System.Net.Security;
 
 Terminal terminal = new Terminal("Terminal 5");
 void Loadfiles()// task 1
@@ -264,6 +265,18 @@ void AssignBoardingGate(Dictionary<string, Flight> flightsDict, Dictionary<strin
                 selectedBoardingGate = boardingGates[boardingGateName]; // capture the inputted boardingGate object
                 approvedBoardingGateName = true; //so that the program knows that user input a valid boardingGate and while loop can be exited later
 
+            }
+
+            bool assignable =
+                (flightNumber is LWTTFlight && selectedBoardingGate.SupportsLWTT) ||
+                (flightNumber is CFFTFlight && selectedBoardingGate.SupportsDDJB) ||
+                (flightNumber is DDJBFlight && selectedBoardingGate.SupportsCFFT) ||
+                (flightNumber is NORMFlight);
+
+            if (!assignable)
+            {
+                Console.WriteLine($"Gate {selectedBoardingGate.GateName} does not support the flight type of Flight {selectedFlight.FlightNumber}.");
+                continue;
             }
 
             //ask user for input again since the input value is invalid
