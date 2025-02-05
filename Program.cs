@@ -267,18 +267,6 @@ void AssignBoardingGate(Dictionary<string, Flight> flightsDict, Dictionary<strin
 
             }
 
-            bool assignable =
-                (selectedFlight is LWTTFlight && selectedBoardingGate.SupportsLWTT) ||
-                (selectedFlight is CFFTFlight && selectedBoardingGate.SupportsCFFT) ||
-                (selectedFlight is DDJBFlight && selectedBoardingGate.SupportsDDJB) ||
-                (selectedFlight is NORMFlight);
-
-            if (!assignable)
-            {
-                Console.WriteLine($"Gate {selectedBoardingGate.GateName} does not support the flight type of Flight {selectedFlight.FlightNumber}.");
-                continue;
-            }
-
             //ask user for input again since the input value is invalid
             if (!approvedFlightNumber)  
             {
@@ -295,6 +283,18 @@ void AssignBoardingGate(Dictionary<string, Flight> flightsDict, Dictionary<strin
                 Console.WriteLine($"Boarding Gate {boardingGateName} is already assigned to Flight {selectedBoardingGate.Flight.FlightNumber}. Please choose a different gate.");
                 continue;
 
+            }
+
+            bool assignable =
+                (selectedFlight is LWTTFlight && selectedBoardingGate.SupportsLWTT) ||
+                (selectedFlight is CFFTFlight && selectedBoardingGate.SupportsCFFT) ||
+                (selectedFlight is DDJBFlight && selectedBoardingGate.SupportsDDJB) ||
+                (selectedFlight is NORMFlight);
+
+            if (!assignable)
+            {
+                Console.WriteLine($"Gate {selectedBoardingGate.GateName} does not support the flight type of Flight {selectedFlight.FlightNumber}.");
+                continue;
             }
             break; //exits the loop if inputs are valid
         }
