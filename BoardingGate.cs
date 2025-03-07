@@ -40,3 +40,5 @@ namespace PRG2_Assignment
         }
     }
 }
+
+console.writeline("LMAO");
